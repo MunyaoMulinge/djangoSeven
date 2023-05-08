@@ -35,16 +35,18 @@ def loginPage(request):
 
         if user is not None:
             login(request, user)
-            return redirect ('home')
+            return redirect('home')
         else:
             messages.error(request, "User name or password does not exist")
 
-    context = {'page' :page}
+    context = {'page': page}
     return render(request, 'base/login_register.html', context)
+
 
 def logoutUser(request):
     logout(request)
     return redirect('home')
+
 
 def registerPage(request):
     form = UserCreationForm
@@ -80,8 +82,10 @@ def home(request):
 
 def room(request, pk):
     room = Room.objects.get(id=pk)
-    context = {'room': room}
+    room_messages = room.message_set.all()
+    context = {'room': room, 'room_messages':room_messages}
     return render(request, 'base/room.html', context)
+
 
 @login_required(login_url='login')
 def createRoom(request):
@@ -95,6 +99,7 @@ def createRoom(request):
 
     context = {'form': form}
     return render(request, 'base/room_form.html', context)
+
 
 @login_required(login_url='login')
 def updateRoom(request, pk):
@@ -112,6 +117,7 @@ def updateRoom(request, pk):
 
     context = {'form': form}
     return render(request, 'base/room_form.html', context)
+
 
 @login_required(login_url='login')
 def deleteRoom(request, pk):
